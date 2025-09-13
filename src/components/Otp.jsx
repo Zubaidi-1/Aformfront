@@ -17,9 +17,24 @@ export default function Otp() {
 
   const email =
     typeof window !== "undefined" ? localStorage.getItem("email") : null;
-  const route =
+
+  // ⚠️ Don't include "#/" in stored routes. Default to plain path.
+  const storedRoute =
     (typeof window !== "undefined" && localStorage.getItem("route")) ||
-    "/#/login";
+    "/login";
+
+  // Normalize anything we might have saved earlier ("/#/foo", "#/foo", or full URL with a "#/foo")
+  const normalizeRoute = (r = "/login") =>
+    r
+      // If someone saved a full URL with a hash, drop everything before the hash
+      .replace(/^https?:\/\/[^#]+#/, "")
+      // Drop leading "#/" or "/#/"
+      .replace(/^\/?#\//, "/")
+      // Ensure it starts with a single "/"
+      .replace(/^(?!\/)/, "/");
+
+  const targetRoute = normalizeRoute(storedRoute);
+
   const type =
     (typeof window !== "undefined" && localStorage.getItem("otp_type")) ||
     "signup";
@@ -50,8 +65,12 @@ export default function Otp() {
         throw new Error(data?.message || "Invalid or expired code");
       }
 
-      // success → go where you planned
-      navigate(`${route}`, { replace: true });
+      // Optional: clean up transient storage
+      localStorage.removeItem("otp_type");
+      // localStorage.removeItem("route"); // uncomment if you don't need it anymore
+
+      // ✅ Navigate to a clean path (no double hash)
+      navigate(targetRoute, { replace: true });
     } catch (err) {
       setErrorMsg(err.message || "Verification failed");
     } finally {

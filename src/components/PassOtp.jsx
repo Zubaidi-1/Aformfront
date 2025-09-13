@@ -9,6 +9,13 @@ const API_BASE = (() => {
   return `${noTrail}/api`;
 })();
 
+// Normalize anything previously saved like "/#/foo", "#/foo", or full URLs with a "#/foo"
+const normalizeRoute = (r = "/login") =>
+  r
+    .replace(/^https?:\/\/[^#]+#/, "") // drop everything before the hash
+    .replace(/^\/?#\//, "/") // strip leading "#/" or "/#/"
+    .replace(/^(?!\/)/, "/"); // ensure it starts with "/"
+
 export default function PassOtp() {
   const navigate = useNavigate();
   const [otp, setOtp] = useState("");
@@ -17,9 +24,12 @@ export default function PassOtp() {
 
   const email =
     typeof window !== "undefined" ? localStorage.getItem("email") : null;
-  const route =
+
+  // ⚠️ Default to a plain path (no "#")
+  const storedRoute =
     (typeof window !== "undefined" && localStorage.getItem("route")) ||
-    "/#/login";
+    "/login";
+  const targetRoute = normalizeRoute(storedRoute);
 
   const onChange = (e) => setOtp(e.target.value);
 
@@ -27,10 +37,12 @@ export default function PassOtp() {
     e.preventDefault();
     setErrorMsg("");
 
-    if (!email)
+    if (!email) {
       return setErrorMsg("No email found. Please restart the reset flow.");
-    if (!otp || otp.trim().length < 4)
+    }
+    if (!otp || otp.trim().length < 4) {
       return setErrorMsg("Enter the 4–8 digit code from your email.");
+    }
 
     try {
       setSubmitting(true);
@@ -45,7 +57,12 @@ export default function PassOtp() {
         throw new Error(data?.message || "Invalid or expired code");
       }
 
-      navigate(`${route}`, { replace: true });
+      // Optional cleanup of transient values
+      // localStorage.removeItem("route");
+      // localStorage.removeItem("email");
+
+      // ✅ Navigate to a clean path (HashRouter will add "#/" for you)
+      navigate(targetRoute, { replace: true });
     } catch (err) {
       setErrorMsg(err.message || "Verification failed");
     } finally {
@@ -59,7 +76,6 @@ export default function PassOtp() {
         onSubmit={verifyOtp}
         className="flex flex-col gap-4 bg-white rounded-2xl shadow-lg p-8 w-full max-w-md border-2 border-[#967aa1]"
       >
-        {/* Title */}
         <h1 className="text-2xl font-bold text-[#192a51]">Verify OTP</h1>
 
         <input
@@ -71,23 +87,19 @@ export default function PassOtp() {
           autoComplete="one-time-code"
           placeholder="Enter OTP"
           required
-          className="w-full px-4 py-3 text-[#192a51] border border-[#aaa1c8] rounded-lg 
-                   focus:outline-none focus:ring-2 focus:ring-[#192a51] 
-                   transition"
+          className="w-full px-4 py-3 text-[#192a51] border border-[#aaa1c8] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#192a51] transition"
         />
 
         <button
           type="submit"
           disabled={submitting}
-          className="bg-[#192a51] w-full py-3 rounded-lg font-semibold text-white 
-                   transition transform hover:scale-[1.02] hover:shadow-md text-center disabled:opacity-50"
+          className="bg-[#192a51] w-full py-3 rounded-lg font-semibold text-white transition transform hover:scale-[1.02] hover:shadow-md text-center disabled:opacity-50"
         >
           {submitting ? "Verifying…" : "Next"}
         </button>
 
         {errorMsg ? <p className="text-sm text-red-500">{errorMsg}</p> : null}
 
-        {/* Small link */}
         <p className="text-sm text-gray-500">
           Already have an account?{" "}
           <Link
