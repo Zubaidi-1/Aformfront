@@ -1,9 +1,8 @@
 import { useState } from "react";
 import colors from "../assets/colors";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
-const navigate = Navigate();
 // Normalize backend API base URL from Vite env
 const API_BASE = (() => {
   const raw = import.meta.env.VITE_API_URL || "http://localhost:3000/";
@@ -16,7 +15,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-
+  const navigate = useNavigate();
   const onchange = (e) => {
     const { name, value } = e.target;
     if (name === "email") setEmail(value);
@@ -40,7 +39,7 @@ export default function Login() {
       }
 
       localStorage.setItem("token", data.token);
-      navigate("/login");
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       setErrorMsg(err.message);
     }

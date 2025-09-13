@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Build API base from Vite env (handles trailing slash/spaces)
 const API_BASE = (() => {
@@ -10,6 +10,7 @@ const API_BASE = (() => {
 })();
 
 export default function Reset() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -43,7 +44,7 @@ export default function Reset() {
       localStorage.setItem("email", trimmed);
       localStorage.setItem("otp_type", "reset");
 
-      window.location.href = "/#/verifyPassOtp";
+      navigate("/verifypassotp", { replace: true });
     } catch (err) {
       setErrorMsg(err.message || "Something went wrong");
     } finally {

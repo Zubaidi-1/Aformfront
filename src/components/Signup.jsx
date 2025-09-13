@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Build API base from Vite env (handles trailing slash/spaces)
 const API_BASE = (() => {
@@ -16,7 +16,7 @@ export default function Signup() {
   const [confpassword, setConfPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
-
+  const navigate = useNavigate();
   const email =
     typeof window !== "undefined"
       ? (localStorage.getItem("email") || "").trim()
@@ -63,7 +63,7 @@ export default function Signup() {
       }
 
       // success → go to login
-      window.location.href = "/#/login";
+      navigate("/login", { replace: true });
     } catch (err) {
       setErrorMsg(err.message || "Something went wrong");
     } finally {

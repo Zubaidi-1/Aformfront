@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
 // Nav.jsx
 export default function Nav({ active, setActive }) {
   const navItems = ["Dashboard", "Form", "Tables", "Quality"];
-
+  const navigate = useNavigate();
   const onLogout = () => {
     try {
       localStorage.removeItem("token");
@@ -9,7 +11,7 @@ export default function Nav({ active, setActive }) {
       // sessionStorage.clear();
       // localStorage.clear(); // <- only if you want to wipe everything
     } catch {}
-    window.location.href = "/"; // hard redirect to home
+    navigate("/", { replace: true });
   };
 
   return (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function ChangePass() {
   const [password, setPassword] = useState("");
@@ -7,7 +7,7 @@ export default function ChangePass() {
   const [errorMsg, setErrorMsg] = useState("");
   const [okMsg, setOkMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
-
+  const navigate = useNavigate();
   const email =
     typeof window !== "undefined" ? localStorage.getItem("email") : null;
 
@@ -58,7 +58,7 @@ export default function ChangePass() {
       setOkMsg("Password changed successfully. Redirecting to login…");
       // small delay so the user can read the message
       setTimeout(() => {
-        window.location.href = "/#/login";
+        navigate("/login", { replace: true });
       }, 900);
     } catch (err) {
       setErrorMsg(err.message || "Something went wrong");

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const API_BASE = (() => {
   const raw = import.meta.env.VITE_API_URL || "http://localhost:3000/";
@@ -12,7 +12,7 @@ export default function SignUpEmail() {
   const [email, setEmail] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const onChange = (e) => setEmail(e.target.value);
 
   const sendSignupOtp = async (e) => {
@@ -39,7 +39,7 @@ export default function SignUpEmail() {
       localStorage.setItem("route", "/#/signup");
       localStorage.setItem("email", trimmed);
       localStorage.setItem("otp_type", "signup");
-      window.location.href = "/#/verifyotp";
+      navigate("/verifyotp", { replace: true });
     } catch (err) {
       console.error(err);
       setErrorMsg("Network error. Check your connection and try again.");

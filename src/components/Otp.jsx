@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Build API base from Vite env (handles trailing slash)
 const API_BASE = (() => {
@@ -10,6 +10,7 @@ const API_BASE = (() => {
 })();
 
 export default function Otp() {
+  const navigate = useNavigate();
   const [otp, setOtp] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -50,7 +51,7 @@ export default function Otp() {
       }
 
       // success → go where you planned
-      window.location.href = route;
+      navigate(`${route}`, { replace: true });
     } catch (err) {
       setErrorMsg(err.message || "Verification failed");
     } finally {
