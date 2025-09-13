@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 // Build API base from Vite env (handles trailing slash/spaces)
 const API_BASE = (() => {
