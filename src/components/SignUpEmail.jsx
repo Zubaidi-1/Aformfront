@@ -80,12 +80,12 @@ export default function SignUpEmail() {
 
       <p className="text-sm text-gray-500">
         Already have an account?{" "}
-        <a
-          href="/#/login"
+        <Link
+          to="/login"
           className="text-[#967aa1] font-medium hover:underline"
         >
           Log in
-        </a>
+        </Link>
       </p>
     </form>
   );

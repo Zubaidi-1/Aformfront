@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { Link } from "react-router-dom";
 
 // Build API base from Vite env (handles trailing slash/spaces)
 const API_BASE = (() => {
@@ -68,12 +69,12 @@ export default function Submissions() {
           <p className="text-white/80 mb-6">
             Please log in to view your submissions.
           </p>
-          <a
-            href="/#/login"
-            className="inline-block rounded-xl px-5 py-3 bg-white text-indigo-700 font-medium hover:bg-white/90 transition"
+          <Link
+            to="/login"
+            className="text-[#967aa1] font-medium hover:underline"
           >
-            Go to Login
-          </a>
+            Log in
+          </Link>
         </div>
       </div>
     );

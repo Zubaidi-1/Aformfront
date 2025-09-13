@@ -1,5 +1,6 @@
 import { useState } from "react";
 import colors from "../assets/colors";
+import { Link } from "react-router-dom";
 
 // Normalize backend API base URL from Vite env
 const API_BASE = (() => {
@@ -89,12 +90,12 @@ export default function Login() {
         {/* Small link */}
         <p className="text-sm text-gray-500">
           Forgot your password?{" "}
-          <a
-            href="/#/reset"
+          <Link
+            to="/reset"
             className="text-[#967aa1] font-medium hover:underline"
           >
             Reset
-          </a>
+          </Link>
         </p>
       </form>
     </div>

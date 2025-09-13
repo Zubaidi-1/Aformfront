@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 // Build API base from Vite env (handles trailing slash/spaces)
 const API_BASE = (() => {
@@ -216,12 +217,12 @@ export default function Dash({ setActive }) {
             >
               Submit a new form
             </button>
-            <a
-              href="/#/submissions"
+            <Link
+              to="/submissions"
               className="rounded-xl px-4 py-2 border border-white/50 hover:border-white transition"
             >
               Review submissions
-            </a>
+            </Link>
           </div>
         </motion.div>
       </div>
