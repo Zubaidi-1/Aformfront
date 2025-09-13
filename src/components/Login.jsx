@@ -1,7 +1,9 @@
 import { useState } from "react";
 import colors from "../assets/colors";
 import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
+const navigate = Navigate();
 // Normalize backend API base URL from Vite env
 const API_BASE = (() => {
   const raw = import.meta.env.VITE_API_URL || "http://localhost:3000/";
@@ -38,7 +40,7 @@ export default function Login() {
       }
 
       localStorage.setItem("token", data.token);
-      window.location.href = "/#/dashboard";
+      navigate("/login");
     } catch (err) {
       setErrorMsg(err.message);
     }
