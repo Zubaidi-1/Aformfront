@@ -561,8 +561,8 @@ export default function TableView() {
                                   {/* adjust to your 4 privileges */}
                                   <option value="viewer">viewer</option>
                                   <option value="editor">editor</option>
-                                  <option value="admin">supervisor</option>
-                                  <option value="owner">admin</option>
+                                  <option value="supervisor">supervisor</option>
+                                  <option value="admin">admin</option>
                                 </select>
                               </td>
                             );
